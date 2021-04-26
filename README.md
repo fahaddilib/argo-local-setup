@@ -72,17 +72,39 @@ To install
 
 ## Argo workflows
 
-Argo is an cloud-native workflow orchastrator. You install Argo custom resource defintion on the kubernetes cluster, which then give you the capabilities to submit jobs/workflow using YAML. Note if you prefer not to write YAML, you can use the Kubeflow pipelines SDK, which allows you to write workflows in python. The next step is kf pipelines can compile the pipeline definition to YAML, which can then be used directly with Argo.
+Argo is an cloud-native workflow orchastrator. You install Argo custom resource defintion on the kubernetes cluster, which then give you the capabilities to submit jobs/workflow using YAML. Note if you prefer not to write YAML, you can use the Kubeflow pipelines SDK, and couler, which allows you to write workflows in python. The libraries compile the python pipeline definition to YAML, which can then be used directly with Argo.
 
 To install argo-crd and cli, see the example installation script [argo_install.sh](./examples/argo/argo_install.sh)
 
-To get this to work properly you need to create a Service Account, RBAC role and role binding to the created service account.
+
+## Install Argo CRD and operator
 
 ```bash
-    k apply -f -n the-namespace-you-want ./examples/argo/rbac.yaml
+    kubectl create ns argo
+    kubectl apply -f -n argo ./examples/argo/rbac.yaml
+    kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=default:default
+    kubectl create configmap -n argo workflow-controller-configmap --from-literal=config="containerRuntimeExecutor: pns"
+    kubectl apply -n argo -f https://raw.githubusercontent.com/argoproj/argo/v2.4.3/manifests/install.yam
 ```
 
-In all workflow add the `serviceAccountName: workflow` under the workflow spec definition.
+### Install Argo CLI
+
+```bash
+    # Download the binary
+    curl -sLO https://github.com/argoproj/argo/releases/download/v2.12.2/argo-linux-amd64.gz
+
+    # Unzip
+    gunzip argo-linux-amd64.gz
+
+    # Make binary executable
+    chmod +x argo-linux-amd64
+
+    # Move binary to path
+    sudo mv ./argo-linux-amd64 /usr/bin/argo
+
+    # Test installation
+    argo version
+```
 
 ### Argo Workflows example
 
