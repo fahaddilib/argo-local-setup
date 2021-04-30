@@ -74,7 +74,7 @@ To install
 
 Argo is an cloud-native workflow orchastrator. You install Argo custom resource defintion on the kubernetes cluster, which then give you the capabilities to submit jobs/workflow using YAML. Note if you prefer not to write YAML, you can use the Kubeflow pipelines SDK, and couler, which allows you to write workflows in python. The libraries compile the python pipeline definition to YAML, which can then be used directly with Argo.
 
-To install argo-crd and cli, see the example installation script [argo_install.sh](./examples/argo/argo_install.sh)
+To install argo-crd and cli, see the example installation steps below. 
 
 
 ## Install Argo CRD and operator
